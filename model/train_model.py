@@ -1,39 +1,25 @@
-import os
-import pathlib
 from datetime import datetime
-import librosa
-import librosa.display as ld
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from IPython.display import Audio
-from tqdm import tqdm
 
-import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 from keras.models import Sequential, load_model
-from keras.regularizers import l2
 from keras.utils import to_categorical
-from keras.utils import plot_model
 from keras.callbacks import ModelCheckpoint
 from keras.layers import (Activation, Conv1D, Dense, Dropout, Flatten, MaxPooling1D)
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
-import seaborn as sns
 
 class Model:
-    def __init__(self, features, df):
-        self.x = np.array(features['feature'].tolist())
-        self.y = np.array(df.emotion.tolist())
+    def __init__(self):
         self.X_train = ""
         self.Y_train = ""
         self.X_test = ""
         self.Y_test = ""
         self.model = Sequential()
-        self.filepath = '/Users/vanessamolinari/Documents/Ciência da Computação/TCC/Protótipo/model/speech_emotion_recognition.hdf5'
+        self.filepath = 'model/speech_emotion_recognition.hdf5'
 
-    def train(self):
+    def train(self, features, df):
+        self.x = np.array(features['Feature'].tolist())
+        self.y = np.array(df.Emotion.tolist())
         labelencoder = LabelEncoder()
         self.y = to_categorical(labelencoder.fit_transform(self.y))
 
@@ -43,9 +29,7 @@ class Model:
 
         num_labels = self.y.shape[1]
 
-        input_shape=(self.X_train.shape[1],1)
-
-        self.model.add(Conv1D(64, kernel_size=(5), activation='relu',input_shape=(self.X_train.shape[1],1)))
+        self.model.add(Conv1D(128, kernel_size=(5), activation='relu',input_shape=(self.X_train.shape[1],1)))
 
         self.model.add(Conv1D(128, kernel_size=(5),activation='relu', padding='same'))
         self.model.add(MaxPooling1D(pool_size=(5)))
@@ -58,8 +42,8 @@ class Model:
 
         self.model.add(Dense(64, activation='relu'))
         self.model.add(Dense(num_labels))
-        self.model.add(Activation('softmax'))
 
+        self.model.add(Dense(units=8, activation='softmax'))
         self.model.compile(loss='categorical_crossentropy',metrics=['accuracy'],optimizer='adam')
 
         num_epochs = 50
@@ -72,13 +56,10 @@ class Model:
                                 validation_data=(self.X_test, self.Y_test), callbacks=[checkpointer], verbose=1)
         duration = datetime.now() - start
         print("[INFO] Treinamento concluído em:", duration)
-        print("[INFO] Avaliação do modelo:", self.test())
+        print(f"[INFO] Avaliação do modelo: {self.test()}%")
 
     def test(self):
-        return self.model.evaluate(self.X_test, self.Y_test, verbose=0)
+        return self.model.evaluate(self.X_test, self.Y_test, verbose=0)[1]*100
     
     def call_model(self, input):
-        self.model=Sequential()
-        self.model.load_weights(self.filepath)
-
-        return self.model.call(input)
+        return load_model(input)
