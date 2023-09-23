@@ -1,4 +1,6 @@
 flask==2.2.3
+flask-cors==3.0.10
+flask-restx==1.1.0
 keras==2.12.0->2.13.1
 librosa==0.10.0->0.10.1
 matplotlib==3.7.1
@@ -6,3 +8,4 @@ numpy==1.23.5
 pandas==2.0.3
 sklearn==1.2.2
 venv==3.10.8
+werkzeug==2.2.3
