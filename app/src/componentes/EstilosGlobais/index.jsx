@@ -1,6 +1,13 @@
 import { createGlobalStyle } from 'styled-components'
 
 const EstilosGlobais = createGlobalStyle`
+  :root{
+    --cor-primaria: #96B6C5;
+    --cor-secundaria: #ADC4CE;
+    --cor-borda: #F1F0E8;
+    --cor-letra: #12486B;
+
+  }
   html {
     line-height: 1.15; 
     -webkit-text-size-adjust: 100%; 

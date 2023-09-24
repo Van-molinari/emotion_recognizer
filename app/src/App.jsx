@@ -6,7 +6,7 @@ import Button from "./componentes/Button"
 import { useState } from "react"
 
 const Fundo = styled.div`
-  background-color: darkgray;
+  background-color: var(--cor-primaria);
   width: 100%;
   min-height: 100vh;
   position: absolute;
@@ -14,6 +14,7 @@ const Fundo = styled.div`
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  color: var(--cor-letra);
 `
 
 function App() {
