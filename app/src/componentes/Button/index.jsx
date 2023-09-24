@@ -1,9 +1,27 @@
+import styled from "styled-components"
 
+const File = styled.input`
+    display:none;
+`
 
+const Label = styled.label`
+    width: 10vw;
+    height: 3vh;
+    background-color: var(--cor-secundaria);
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-letra);
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+`
+
+// eslint-disable-next-line react/prop-types
 export default function Button({ setAudio }) {
     return (
         <div>
-            <input className="audio"
+            <Label htmlFor="audio"> Escolher áudio</Label>
+            <File className="audio"
+                id="audio"
                 type="file"
                 accept="audio/*"
                 onChange={(event) => {
