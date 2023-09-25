@@ -15,7 +15,9 @@ api = Api(app,
           description='Audio Recognition API Project',
           doc='/docs')
 
-api.add_namespace(routes.api, path='/recognize')
+api.add_namespace(routes.api_upload, path='/data')
+api.add_namespace(routes.api_search, path='/search')
+api.add_namespace(routes.api_recognize, path='/recognize')
 
 @app.route('/upload')
 def upload_file():
