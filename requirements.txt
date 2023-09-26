@@ -6,6 +6,9 @@ librosa==0.10.0->0.10.1
 matplotlib==3.7.1
 numpy==1.23.5
 pandas==2.0.3
-sklearn==1.2.2
-venv==3.10.8
+pyAudio==0.2.13
+scikit-learn==1.2.2
+SpeechRecognition==3.9.0
+tensorflow==2.13.0
+virtualenv==20.20.0
 werkzeug==2.2.3
