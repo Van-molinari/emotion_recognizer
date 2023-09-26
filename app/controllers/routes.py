@@ -1,23 +1,21 @@
 from flask import request
-from flask_restx import Resource, Namespace, fields
+from flask_restx import Resource, Namespace
+from concurrent.futures import ThreadPoolExecutor
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
+import recognize
 import uuid
 
-api = Namespace('Recognize', description='Recognize human emotion and transcript audio speech')
+api_upload = Namespace('Upload', description='Uploads audio data to be processed')
 
-upload_parser = api.parser()
+upload_parser = api_upload.parser()
 upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
 
-search_model = api.model('SearchModel', {
-    'id': fields.String(description='Audio ID', type='str', required=True)
-})
-
-@api.route('/')
-class UploadController(Resource): 
-    @api.response(201, "Created")
-    @api.response(400, "Bad Request")
-    @api.expect(upload_parser)
+@api_upload.route('/upload')
+class UploadController(Resource):
+    @api_upload.response(201, "Created")
+    @api_upload.response(400, "Bad Request")
+    @api_upload.expect(upload_parser)
     def post(self):
         print(request.files)
         f = request.files['file']
@@ -27,49 +25,44 @@ class UploadController(Resource):
                 line = "\n" + file_id + "," + f.filename
                 file.write(line)
             f.save("media/" + secure_filename(f.filename))
+            with ThreadPoolExecutor() as executor:
+                future = executor.submit(RecognizeController.get(self, file_id))
+
             return {"id": file_id, "file": f.filename}, 201
         else:
             return {"error": "Not supported. Please, upload only WAV or MP3 files."}, 400
-        
-@api.route('/search')
+
+api_search = Namespace('Search', description='Recognize human emotion and transcript audio speech')
+
+search_model = api_search.parser()
+search_model.add_argument('id', location='id', type=str, required=True)
+
+@api_search.route('/')
 class SearchController(Resource):        
-    @api.response(200, "OK")
-    @api.response(404, "Not Found")
-    @api.expect(search_model)
+    @api_search.response(200, "OK")
+    @api_search.response(404, "Not Found")
     def get(self):
-        return "Get ok", 200
+        with open("media/files.csv", "r") as file:
+            list_files = file.readlines()[1:]
+            final_list = []
+            for x in list_files:
+                data = {
+                    "id": x.split(",")[0].replace("\n", ""),
+                    "file": x.split(",")[1].replace("\n", "")
+                }
+                final_list.append(data)
+        return final_list, 200
 
-# @api.route('/r')
-# class Recognize(Resource):
-#     @api.route('/upload', methods=['POST'])
-#     def upload_figele(self, ):
-#         return render_template('/Users/vanessamolinari/Documents/Ciência da Computação/TCC/Protótipo/app/templates/upload.html')
+api_recognize = Namespace('Recognize', description='Recognize human emotion and transcript audio speech')
 
-#     @api.route('/uploadAudio', methods = ['GET', 'POST'])
-#     def upload(self, ):
-#         if request.method == 'POST':
-#             f = request.files['file']
-#             f.save(secure_filename(f.filename))
-#             return 'file uploaded successfully'
-
-#     @api.route('/recognize')
-#     def recognize(self, ):
-#         print('Post recebido')
-#         # text = request.json['text']
-#         file = request.files['audio']
-#         # Salva o arquivo como um arquivo temporário no formato PCM WAV
-#         with tempfile.NamedTemporaryFile(suffix='.wav') as f:
-#             file.save(f.name)
-#             audio_info = pydub.utils.mediainfo(f.name)
-#             # Converta o arquivo para PCM Wave usando o ffmpeg
-#             cmd = ['ffmpeg', '-i', f.name, '-acodec', 'pcm_s16le', '-ar', '16000', f.name + '.wav']
-#             subprocess.check_output(cmd)
-#             audio = sr.AudioFile(f.name + '.wav')
-#             with audio as source:
-#                 audio_data = sr.Recognizer().record(source)
-
-#         recognized_text = sr.Recognizer().recognize_google(audio_data, language="pt-BR")
-#         response = f'Você disse: {recognized_text}'
-#         print(response)
-
-#         return response, 200, {'Content-Type': 'application/json; charset=utf-8'}
+@api_recognize.route('/<id>')
+class RecognizeController(Resource):        
+    @api_recognize.response(200, "OK")
+    @api_recognize.response(404, "Not Found")
+    def get(self, id):
+        with open("media/files.csv", "r") as file:
+            list_files = file.readlines()[1:]
+            list_files = [x.split(",")[1].replace("\n", "") for x in list_files if x.split(",")[0].replace("\n", "") == id][0]
+            predict = recognize.predictSound("media/" + list_files)
+            message = recognize.returnText("media/" + list_files)
+        return {"id": id, "file": list_files, "emotion": predict, "message": message}, 200

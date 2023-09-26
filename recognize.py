@@ -1,5 +1,6 @@
 import librosa
 import numpy as np
+import speech_recognition as sr
 from model import train_model
 
 from sklearn.preprocessing import LabelEncoder
@@ -27,5 +28,16 @@ def predictSound(AUDIO, info = False, plot_waveform = False, plot_spectrogram = 
     predictions = predictions.astype(int).flatten()
     predictions = (labelencoder.inverse_transform((predictions)))
     print('Resultado:', predictions)
+    return predictions[0]
 
-predictSound('<enter_path_here>')
+def returnText(audio):
+    speech = sr.Recognizer()
+    with sr.AudioFile(audio) as source:
+        audio_data = speech.record(source)
+    recognized_text = speech.recognize_google(audio_data)
+    print(recognized_text)
+    return recognized_text
+
+# predictSound('<enter_path_here>')
+
+# returnText("media/1001_IEO_DIS_HI.wav")
