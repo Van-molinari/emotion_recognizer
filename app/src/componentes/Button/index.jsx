@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import enviaAudio from "../../API/api"
 
 const File = styled.input`
     display:none;
@@ -25,7 +26,8 @@ export default function Button({ setAudio }) {
                 type="file"
                 accept="audio/*"
                 onChange={(event) => {
-                    setAudio(event.target.value)                  
+                    setAudio(event.target.files[0])
+                    enviaAudio()                 
                 }}
             />
         </div>
