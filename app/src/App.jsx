@@ -12,7 +12,7 @@ const Fundo = styled.div`
   min-height: 100vh;
   position: absolute;
   display: flex;
-  justify-content: space-around;
+  //justify-content: space-around;
   align-items: center;
   flex-direction: column;
   color: var(--cor-letra);
@@ -22,19 +22,26 @@ function App() {
   const [speakComputer, setSpeakComputer] = useState('O que é');
   const [speakAudio, setSpeakAudio] = useState('');
 
-  const [audio, setAudio] = useState()
-  async function enviaAudio() {
-    api.enviaAudio(audio)
+  const enviaAudio = (audio) => {
+    console.log(audio);
+    api(audio).then(response => {
+      this.reponseJson(response.json())
+    })
   }
+
+    const reponseJson = (response) => {
+      response.then(result => {
+        this.setSpeakAudio({ message: result.message })
+      })
+    }
 
   return (
     <Fundo>
       <EstilosGlobais/>
       <SpeechBubble speak={speakComputer}/>
       <Computer/>
-      <Button setAudio={setAudio} enviaAudio={enviaAudio}/>
-      <h3>O que foi dito:</h3>
-      <SpeechBubble speak={speakAudio}/>
+      <Button enviaAudio={enviaAudio}/>
+      <SpeechBubble speak={speakAudio} diz={'O que foi dito:'}/>
     </Fundo>
   )
 }
