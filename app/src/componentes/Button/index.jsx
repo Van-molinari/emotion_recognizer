@@ -13,21 +13,31 @@ const Label = styled.label`
     padding: 10px;
     border-radius: 15px;
     text-align: center;
+
+    &:hover{
+        width: 12vw;
+        height: 5vh; 
+    }
+`
+
+const DivStyle = styled.div`
+    margin-top: 13vh;
+    margin-bottom: 20px;
 `
 
 // eslint-disable-next-line react/prop-types
-export default function Button({ setAudio }) {
+export default function Button({ analisaEmocoes }) {
     return (
-        <div>
+        <DivStyle>
             <Label htmlFor="audio"> Escolher áudio</Label>
             <File className="audio"
                 id="audio"
                 type="file"
                 accept="audio/*"
                 onChange={(event) => {
-                    setAudio(event.target.value)                  
+                    analisaEmocoes(event.target.files[0])                 
                 }}
             />
-        </div>
+        </DivStyle>
     )
 }
