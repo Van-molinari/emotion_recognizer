@@ -26,7 +26,7 @@ const DivStyle = styled.div`
 `
 
 // eslint-disable-next-line react/prop-types
-export default function Button({ enviaAudio }) {
+export default function Button({ analisaEmocoes }) {
     return (
         <DivStyle>
             <Label htmlFor="audio"> Escolher áudio</Label>
@@ -35,7 +35,7 @@ export default function Button({ enviaAudio }) {
                 type="file"
                 accept="audio/*"
                 onChange={(event) => {
-                    enviaAudio(event.target.files[0])                 
+                    analisaEmocoes(event.target.files[0])                 
                 }}
             />
         </DivStyle>

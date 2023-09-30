@@ -4,7 +4,7 @@ import SpeechBubble from "./componentes/SpeechBubble"
 import Computer from "./componentes/Computer"
 import Button from "./componentes/Button"
 import { useState } from "react"
-import api from "./API/api"
+import { api } from "./API/api.js"
 
 const Fundo = styled.div`
   background-color: var(--cor-primaria);
@@ -22,25 +22,21 @@ function App() {
   const [speakComputer, setSpeakComputer] = useState('O que é');
   const [speakAudio, setSpeakAudio] = useState('');
 
-  const enviaAudio = (audio) => {
-    console.log(audio);
-    api(audio).then(response => {
-      this.reponseJson(response.json())
-    })
+  const analisaEmocoes = async (audio) => {
+    setSpeakAudio("Aguarde ...")
+    setSpeakComputer("Aguarde ...")
+    const retorno = await api.enviaAudio(audio)
+    const emocao = await api.emocao(retorno.id)
+    setSpeakAudio(emocao.message)
+    setSpeakComputer(emocao.emotion)
   }
-
-    const reponseJson = (response) => {
-      response.then(result => {
-        this.setSpeakAudio({ message: result.message })
-      })
-    }
 
   return (
     <Fundo>
       <EstilosGlobais/>
       <SpeechBubble speak={speakComputer}/>
       <Computer/>
-      <Button enviaAudio={enviaAudio}/>
+      <Button analisaEmocoes={analisaEmocoes}/>
       <SpeechBubble speak={speakAudio} diz={'O que foi dito:'}/>
     </Fundo>
   )
