@@ -5,6 +5,7 @@ import Computer from "./componentes/Computer"
 import Button from "./componentes/Button"
 import { useState } from "react"
 import { api } from "./API/api.js"
+import fotos from './componentes/Computer/fotos.json' 
 
 const Fundo = styled.div`
   background-color: var(--cor-primaria);
@@ -29,13 +30,23 @@ function App() {
     const emocao = await api.emocao(retorno.id)
     setSpeakAudio(emocao.message)
     setSpeakComputer(emocao.emotion)
+    atualizaFoto(emocao.emotion)
+  }
+
+  const [imagem, setImagem] = useState(fotos[0].imagem)
+  const atualizaFoto = (emocao) => {
+    const novaFoto = fotos.filter((foto) => {
+      return foto.tag === emocao;
+    })
+
+    setImagem(novaFoto[0].imagem)
   }
 
   return (
     <Fundo>
       <EstilosGlobais/>
       <SpeechBubble speak={speakComputer}/>
-      <Computer/>
+      <Computer imagem={imagem}/>
       <Button analisaEmocoes={analisaEmocoes}/>
       <SpeechBubble speak={speakAudio} diz={'O que foi dito:'}/>
     </Fundo>

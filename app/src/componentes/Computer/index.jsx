@@ -1,14 +1,27 @@
 import styled from 'styled-components'
-import computerSmiling from './compureSmiling.png'  
+ 
+
 
 const Image = styled.img`
-  margin-top: 35px;
+  
+  width: 100%;
+  height: 100%;
+  
+`
+const Painel = styled.div`
+  margin-top: 5vh;
+  max-width: 45vh;
+  max-height: 45vh;
+  width: 40vw
+
 `
 
-export default function Computer() {
+export default function Computer({imagem}) {
+
   return (
-    <div>
-        <Image src={computerSmiling} alt="image of a compure smiling" />
-    </div>
+    <Painel>
+        <Image src={imagem} 
+        alt="image of a compure smiling" />
+    </Painel>
   )
 }
