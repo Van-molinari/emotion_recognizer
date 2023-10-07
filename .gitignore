@@ -3,3 +3,5 @@ app/__pycache__/__init__.cpython-310.pyc
 app/controllers/__pycache__/routes.cpython-310.pyc
 app/controllers/__pycache__/routes.cpython-310.pyc
 *.pyc
+__pycache__/**
+database/mysql/**
