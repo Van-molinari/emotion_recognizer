@@ -1,8 +1,8 @@
 flask==2.2.3
 flask-cors==3.0.10
 flask-restx==1.1.0
-keras==2.12.0->2.13.1
-librosa==0.10.0->0.10.1
+keras==2.13.1
+librosa==0.10.1
 matplotlib==3.7.1
 mysql-connector-python==8.1.0
 numpy==1.23.5
