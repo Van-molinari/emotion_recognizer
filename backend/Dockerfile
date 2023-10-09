@@ -4,6 +4,10 @@ WORKDIR /usr/backend
 
 COPY requirements.txt ./
 
+RUN apt update
+
+RUN apt-get -y install portaudio19-dev
+
 RUN pip install --upgrade pip 
 
 RUN pip install -r requirements.txt

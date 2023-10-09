@@ -1,16 +1,17 @@
 version: '3.1'
 
 services:
- frontend:
-  build:
-    context: ./frontend
-    dockerfile: Dockerfile
-  ports:
-    - "5173:5173"
-
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
 
   mysql:
-    image: mysql:latest
+    build: 
+      context: ./database/
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 3307:3306
@@ -30,9 +31,11 @@ services:
     depends_on:
       - mysql
 
-backend:
-  build:
-    context: ./backend
-    dockerfile: Dockerfile
-  ports:
-    - "5500:5500"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    depends_on:
+      - mysql

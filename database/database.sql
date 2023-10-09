@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS audios (
   Audios_files mediumblob NOT NULL,
   Desc_Files varchar(100) NOT NULL,
   PRIMARY KEY (Cod_files)
-)
+);
 
 CREATE TABLE IF NOT EXISTS recognition (
   File_id varchar(50) NOT NULL,
@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS recognition (
   Transcript text NOT NULL,
   Percentage varchar(5) NOT NULL,
   PRIMARY KEY (File_id)
-)
+);
