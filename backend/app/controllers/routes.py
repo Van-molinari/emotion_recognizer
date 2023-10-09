@@ -77,8 +77,8 @@ class RecognizeController(Resource):
         with open(f'uploads/media/{id}.wav', 'wb') as audio:
             audio.write(audio_file)
         predict = recognize.predictSound(f'uploads/media/{id}.wav')
-        message = recognize.returnText(f'uploads/media/{id}.wav')
+        message, predict = recognize.returnText(f'uploads/media/{id}.wav')
 
-        db.insert("recognition", [id, predict, message, "test"])
+        db.insert("recognition", [id, predict, message, f"{predict}%"])
         os.remove(f'uploads/media/{id}.wav')
         return {"id": id, "file": f'uploads/media/{id}.wav', "emotion": predict, "message": message}, 200
