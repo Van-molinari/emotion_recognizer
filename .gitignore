@@ -5,3 +5,4 @@ app/controllers/__pycache__/routes.cpython-310.pyc
 *.pyc
 __pycache__/**
 database/mysql/**
+mysql/**

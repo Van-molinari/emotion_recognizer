@@ -8,6 +8,7 @@ services:
     ports:
       - "5173:5173"
 
+
   mysql:
     build: 
       context: ./database/
@@ -16,12 +17,13 @@ services:
     ports:
       - 3307:3306
     environment:
+      MYSQL_DATABASE: 'emotion_recognizer'
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
     volumes:
-      - ./mysql:/var/lib/mysql
-      - ./uploads:/var/lib/mysql-files
+      - ./database/mysql:/var/lib/mysql
+      - ./backend/uploads/media:/var/lib/mysql-files
 
   adminer:
     image: adminer

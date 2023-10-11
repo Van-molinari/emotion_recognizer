@@ -24,10 +24,10 @@ class UploadController(Resource):
         f = request.files['file']
         if f.filename.endswith(".wav") or f.filename.endswith(".mp3"):
             file_id = str(uuid.uuid1())
-            f.save("uploads/media/" + f.filename)
+            f.save("/usr/backend/uploads/media/" + f.filename)
             db = database.Database()
             db.insert("audios", [file_id, f.filename])
-            os.remove("uploads/media/" + f.filename)
+            #os.remove("/usr/backend/uploads/media/" + f.filename)
             recognize = RecognizeController()
             thread = threading.Thread(target=recognize.get, args=(file_id,))
             thread.start()
@@ -74,11 +74,11 @@ class RecognizeController(Resource):
     def get(self, id):
         db = database.Database()
         audio_file = db.select("audios", id)[0][0]
-        with open(f'uploads/media/{id}.wav', 'wb') as audio:
+        with open(f'/usr/backend/uploads/media/{id}.wav', 'wb') as audio:
             audio.write(audio_file)
-        predict = recognize.predictSound(f'uploads/media/{id}.wav')
-        message, predict = recognize.returnText(f'uploads/media/{id}.wav')
+        predict = recognize.predictSound(f'/usr/backend/uploads/media/{id}.wav')
+        message, predict = recognize.returnText(f'/usr/backend/uploads/media/{id}.wav')
 
         db.insert("recognition", [id, predict, message, f"{predict}%"])
-        os.remove(f'uploads/media/{id}.wav')
-        return {"id": id, "file": f'uploads/media/{id}.wav', "emotion": predict, "message": message}, 200
+        #os.remove(f'/usr/backend/uploads/media/{id}.wav')
+        return {"id": id, "file": f'/usr/backend/uploads/media/{id}.wav', "emotion": predict, "message": message}, 200

@@ -1,4 +1,3 @@
-CREATE DATABASE emotion_recognizer;
 USE emotion_recognizer;
 
 CREATE TABLE audios (
