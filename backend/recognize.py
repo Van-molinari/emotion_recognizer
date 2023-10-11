@@ -24,11 +24,11 @@ def predictSound(AUDIO, info = False, plot_waveform = False, plot_spectrogram = 
 
     predictions = model.predict(mfccs_scaled_features)
     print(predictions)
-    predictions = predictions.argmax(axis=1)
-    predictions = predictions.astype(int).flatten()
+    percentage = predictions[0][np.argmax(predictions)] * 100
+    predictions = predictions.argmax(axis=1) # Média dos valores retornados
     predictions = (labelencoder.inverse_transform((predictions)))
-    print('Resultado:', predictions)
-    return predictions[0]
+    print('Resultado:', predictions, round(percentage, 2))
+    return predictions[0], round(percentage, 2)
 
 def returnText(audio):
     speech = sr.Recognizer()

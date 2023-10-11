@@ -23,7 +23,7 @@ services:
       MYSQL_PASSWORD: docker
     volumes:
       - ./database/mysql:/var/lib/mysql
-      - ./backend/uploads/media:/var/lib/mysql-files
+      - shared_volume:/var/lib/mysql-files
 
   adminer:
     image: adminer
@@ -41,3 +41,8 @@ services:
       - "5500:5500"
     depends_on:
       - mysql
+    volumes:
+      - shared_volume:/usr/backend/uploads
+
+volumes:
+  shared_volume:

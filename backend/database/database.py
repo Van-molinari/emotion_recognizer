@@ -8,7 +8,7 @@ class Database:
     def insert(self, table:str, values:list):
         if table == "audios": 
             file_id, filename = values
-            path_Audio = f"/var/lib/mysql-files/media/{filename}"
+            path_Audio = f"/var/lib/mysql-files/{filename}"
             insert_query = (f"INSERT INTO audios (Audio_id, Audio_name, Audio_content) VALUES ('{file_id}', '{filename}', LOAD_FILE('{path_Audio}'))")
 
         elif table == "recognition":
