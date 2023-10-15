@@ -1,37 +1,37 @@
 [
     {
         "titulo": "Comuputador Inicial",
-        "imagem": "/assets/imagens/computerSmiling.png",
+        "imagem": "/assets/imagens/plaquinha.png",
         "tag": "pattern"
     },
     {
         "titulo": "Comuputador Feliz",
-        "imagem": "/assets/imagens/feliz.jpg",
+        "imagem": "/assets/imagens/feliz.png",
         "tag": "happy"
     },
     {
         "titulo": "Comuputador Triste",
-        "imagem": "/assets/imagens/triste.webp",
+        "imagem": "/assets/imagens/triste.png",
         "tag": "sad"
     },
     {
         "titulo": "Comuputador Raiva",
-        "imagem": "/assets/imagens/raiva.webp",
+        "imagem": "/assets/imagens/raiva.png",
         "tag": "angry"
     },
     {
         "titulo": "Comuputador Neutro",
-        "imagem": "/assets/imagens/computerSmiling.png",
+        "imagem": "/assets/imagens/neutro.png",
         "tag": "neutral"
     },
     {
         "titulo": "Comuputador Error",
-        "imagem": "/assets/imagens/computerSmiling.png",
+        "imagem": "/assets/imagens/f.png",
         "tag": "error"
     },
     {
         "titulo": "Comuputador Icone",
-        "imagem": "/assets/imagens/computerSmiling.png",
+        "imagem": "/assets/imagens/sentimentobo.png",
         "tag": "icon"
     }
 ]
