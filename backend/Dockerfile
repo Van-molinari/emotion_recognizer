@@ -12,6 +12,8 @@ RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt
 
+RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends ffmpeg
+
 COPY . .
 
 EXPOSE 5500

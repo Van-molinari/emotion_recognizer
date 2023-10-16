@@ -26,7 +26,6 @@ class Model:
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.x, self.y, test_size=0.2, random_state=1)
         self.X_train = self.X_train[:,:,np.newaxis]
         self.X_test = self.X_test[:,:,np.newaxis]
-
         num_labels = self.y.shape[1]
 
         self.model.add(Conv1D(128, kernel_size=(5), activation='relu',input_shape=(self.X_train.shape[1],1)))
@@ -43,7 +42,7 @@ class Model:
         self.model.add(Dense(64, activation='relu'))
         self.model.add(Dense(num_labels))
 
-        self.model.add(Dense(units=8, activation='softmax'))
+        self.model.add(Dense(units=4, activation='softmax'))
         self.model.compile(loss='categorical_crossentropy',metrics=['accuracy'],optimizer='adam')
 
         num_epochs = 50

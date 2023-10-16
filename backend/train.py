@@ -2,7 +2,10 @@ from dataset import dataset
 from model import train_model
 
 # Inicializa criação dos datasets
-data = dataset.Dataset(['media/RAVDESS/Audio_Song_Actors_01-24', 'media/RAVDESS/Audio_Speech_Actors_01-24', 'media/CREMAD/AudioWAV'])
+data = dataset.Dataset(['media/RAVDESS/Audio_Song_Actors_01-24', 
+                        'media/RAVDESS/Audio_Speech_Actors_01-24', 
+                        'media/CREMAD/AudioWAV',
+                        'media/TESS'])
 get_dataset = data.get_dataset() # Retorna dataset inicial dos áudios
 
 df = data.create_dataset(get_dataset) # Retorna dataset formatado: emoção x áudio 

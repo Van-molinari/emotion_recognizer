@@ -19,7 +19,21 @@ class Database:
         self.cursor.execute(insert_query)
         self.dbConnection.commit()
 
-    def select(self, table, file_id=None):
+    def update(self, table:str, values:list):
+        if table == "audios": 
+            file_id, filename = values
+            path_Audio = f"/var/lib/mysql-files/{filename}"
+            insert_query = (f"UPDATE audios (Audio_name, Audio_content) VALUES ('{filename}', LOAD_FILE('{path_Audio}')) WHERE Audio_id = '{file_id}'")
+
+        elif table == "recognition":
+            file_id, emotion, transcript, prediction = values
+            insert_query = (f'UPDATE recognition SET Emotion = "{emotion}", Transcript = "{transcript}", Prediction = "{prediction}" WHERE Audio_id = "{file_id}"')
+        
+        print(insert_query)
+        self.cursor.execute(insert_query)
+        self.dbConnection.commit()
+
+    def select(self, table:str, file_id=None):
         if table == "audios" and file_id == None: 
             select_query = "SELECT Audio_id, Audio_name FROM audios"
         

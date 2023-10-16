@@ -4,9 +4,8 @@ from werkzeug.datastructures import FileStorage
 from database import database
 
 import os
-import json
 import threading
-import recognize
+import recognize as rec
 import uuid
 
 api_upload = Namespace('Upload', description='Uploads audio data to be processed')
@@ -25,6 +24,7 @@ class UploadController(Resource):
         if f.filename.endswith(".wav") or f.filename.endswith(".mp3"):
             file_id = str(uuid.uuid1())
             f.save("/usr/backend/uploads/" + f.filename)
+            rec.convertAudio("/usr/backend/uploads/" + f.filename)
             db = database.Database()
             db.insert("audios", [file_id, f.filename])
             os.remove("/usr/backend/uploads/" + f.filename)
@@ -76,9 +76,13 @@ class RecognizeController(Resource):
         audio_file = db.select("audios", id)[0][0]
         with open(f'/usr/backend/uploads/{id}.wav', 'wb') as audio:
             audio.write(audio_file)
-        emotion, predict = recognize.predictSound(f'/usr/backend/uploads/{id}.wav')
-        message = recognize.returnText(f'/usr/backend/uploads/{id}.wav')
-        print(predict)
-        db.insert("recognition", [id, emotion, message, predict])
-        os.remove(f'/usr/backend/uploads/{id}.wav')
+        emotion, predict = rec.predictSound(f'/usr/backend/uploads/{id}.wav')
+        message = rec.returnText(f'/usr/backend/uploads/{id}.wav')
+
+        try:
+            db.insert("recognition", [id, emotion, message, predict])
+            os.remove(f'/usr/backend/uploads/{id}.wav')
+        except: 
+            db.update("recognition", [id, emotion, message, predict])
+
         return {"id": id, "file": f'/usr/backend/uploads/{id}.wav', "emotion": emotion, "predict": predict, "message": message}, 200

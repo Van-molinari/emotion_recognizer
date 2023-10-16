@@ -1,6 +1,7 @@
 flask==2.2.3
 flask-cors==3.0.10
 flask-restx==1.1.0
+ffmpeg==1.4
 keras==2.13.1
 librosa==0.10.1
 matplotlib==3.7.1
@@ -8,8 +9,8 @@ mysql-connector-python==8.1.0
 numpy==1.23.5
 pandas==2.0.3
 pyAudio==0.2.13
+pydub==0.25.1
 scikit-learn==1.2.2
 SpeechRecognition==3.9.0
 tensorflow==2.13.0
-virtualenv==20.20.0
 werkzeug==2.2.3
