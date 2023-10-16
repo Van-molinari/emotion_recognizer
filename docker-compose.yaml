@@ -1,18 +1,29 @@
 version: '3.1'
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+
+
   mysql:
-    image: mysql:latest
+    build: 
+      context: ./database/
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 3307:3306
     environment:
+      MYSQL_DATABASE: 'emotion_recognizer'
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
     volumes:
-      - ./mysql:/var/lib/mysql
-      - ./uploads:/var/lib/mysql-files
+      - ./database/mysql:/var/lib/mysql
+      - shared_volume:/var/lib/mysql-files
 
   adminer:
     image: adminer
@@ -21,3 +32,17 @@ services:
       - 8080:8080
     depends_on:
       - mysql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    depends_on:
+      - mysql
+    volumes:
+      - shared_volume:/usr/backend/uploads
+
+volumes:
+  shared_volume:

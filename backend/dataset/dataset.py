@@ -10,7 +10,7 @@ class Dataset:
     def __init__(self, data_path):
         self.data_path = data_path
         self.extracted_features = []
-        self.emotion_dict = {1: 'neutral', 2: 'calm', 3: 'happy', 4: 'sad', 5: 'angry', 6: 'fear', 7: 'disgust', 8: 'surprise'}
+        self.emotion_dict = {1: 'neutral', 2: 'happy', 3: 'sad', 4: 'angry'}
 
     def get_dataset(self):
         emotions = []
@@ -21,20 +21,42 @@ class Dataset:
                     try:
                         if root.__contains__('RAVDESS'):
                             emotion = int(file[7:8])
+                            if emotion == 2: emotion = 1
+                            if emotion == 3: emotion = 2
+                            if emotion == 4: emotion = 3
+                            if emotion == 5: emotion = 4
+                            if emotion == 6: emotion = 3
+                            if emotion == 7: emotion = 3
+                            if emotion == 8: emotion = 2
                             emotions.append(emotion)
                             full_path.append((root, file))
 
                         elif root.__contains__('CREMAD'):
                             emotion = str(file[9:12])
                             if emotion == 'NEU': emotion = 1
-                            elif emotion == 'HAP': emotion = 3
-                            elif emotion == 'SAD': emotion = 4
-                            elif emotion == 'ANG': emotion = 5
-                            elif emotion == 'FEA': emotion = 7
-                            elif emotion == 'DIS': emotion = 8
+                            elif emotion == 'HAP': emotion = 2
+                            elif emotion == 'SAD': emotion = 3
+                            elif emotion == 'ANG': emotion = 4
+                            elif emotion == 'FEA': emotion = 3
+                            elif emotion == 'DIS': emotion = 3
 
                             emotions.append(emotion)
                             full_path.append((root, file))
+                        
+                        elif root.__contains__('TESS'):
+                            if file.__contains__(".DS_Store"): pass
+                            else:
+                                emotion = str(file.split('_')[2][0:3])
+                                if emotion.upper() == 'NEU': emotion = 1
+                                elif emotion.upper() == 'HAP': emotion = 2
+                                elif emotion.upper() == 'SAD': emotion = 3
+                                elif emotion.upper() == 'ANG': emotion = 4
+                                elif emotion.upper() == 'FEA': emotion = 3
+                                elif emotion.upper() == 'DIS': emotion = 3
+                                elif emotion.upper() == 'PS.': emotion = 2
+
+                                emotions.append(emotion)
+                                full_path.append((root, file))
                         
                     except ValueError:
                         continue

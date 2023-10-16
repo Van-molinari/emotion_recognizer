@@ -1,18 +1,32 @@
 import librosa
 import numpy as np
 import speech_recognition as sr
+
 from model import train_model
+from pydub import AudioSegment
+import os
 
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
 
+def convertAudio(audioFile):
+    print(audioFile)
+    if audioFile.endswith("mp3"): 
+        audio = AudioSegment.from_mp3(audioFile)
+        os.remove(audioFile)
+        audio.export(audioFile.replace(".mp3", ".wav"), format="wav")
+
+    elif audioFile.endswith("wav"):
+        audio = AudioSegment.from_wav(audioFile)
+        os.remove(audioFile)
+        audio.export(audioFile, format="wav")
+        
 # Insert new data
 def predictSound(AUDIO, info = False, plot_waveform = False, plot_spectrogram = False):
 
     labelencoder = LabelEncoder()
-    emotions_list = ['neutral', 'calm', 'happy', 'sad', 'angry', 'fear', 'disgust', 'surprise']
-    y = ""
-    y = to_categorical(labelencoder.fit_transform(np.array(emotions_list)))
+    emotions_list = ['neutral', 'happy', 'sad', 'angry']
+    to_categorical(labelencoder.fit_transform(np.array(emotions_list)))
 
     audio, sample_rate = librosa.load(AUDIO, sr = None, res_type='kaiser_fast')
     mfccs_features = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=120)
@@ -24,11 +38,11 @@ def predictSound(AUDIO, info = False, plot_waveform = False, plot_spectrogram = 
 
     predictions = model.predict(mfccs_scaled_features)
     print(predictions)
-    predictions = predictions.argmax(axis=1)
-    predictions = predictions.astype(int).flatten()
+    percentage = predictions[0][np.argmax(predictions)] * 100
+    predictions = predictions.argmax(axis=1) # Média dos valores retornados
     predictions = (labelencoder.inverse_transform((predictions)))
-    print('Resultado:', predictions)
-    return predictions[0]
+    print('Resultado:', predictions, round(percentage, 2))
+    return predictions[0], round(percentage, 2)
 
 def returnText(audio):
     speech = sr.Recognizer()

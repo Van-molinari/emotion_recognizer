@@ -4,9 +4,8 @@ from werkzeug.datastructures import FileStorage
 from database import database
 
 import os
-import json
 import threading
-import recognize
+import recognize as rec
 import uuid
 
 api_upload = Namespace('Upload', description='Uploads audio data to be processed')
@@ -24,10 +23,11 @@ class UploadController(Resource):
         f = request.files['file']
         if f.filename.endswith(".wav") or f.filename.endswith(".mp3"):
             file_id = str(uuid.uuid1())
-            f.save("uploads/media/" + f.filename)
+            f.save("/usr/backend/uploads/" + f.filename)
+            rec.convertAudio("/usr/backend/uploads/" + f.filename)
             db = database.Database()
             db.insert("audios", [file_id, f.filename])
-            os.remove("uploads/media/" + f.filename)
+            os.remove("/usr/backend/uploads/" + f.filename)
             recognize = RecognizeController()
             thread = threading.Thread(target=recognize.get, args=(file_id,))
             thread.start()
@@ -74,11 +74,15 @@ class RecognizeController(Resource):
     def get(self, id):
         db = database.Database()
         audio_file = db.select("audios", id)[0][0]
-        with open(f'uploads/media/{id}.wav', 'wb') as audio:
+        with open(f'/usr/backend/uploads/{id}.wav', 'wb') as audio:
             audio.write(audio_file)
-        predict = recognize.predictSound(f'uploads/media/{id}.wav')
-        message = recognize.returnText(f'uploads/media/{id}.wav')
+        emotion, predict = rec.predictSound(f'/usr/backend/uploads/{id}.wav')
+        message = rec.returnText(f'/usr/backend/uploads/{id}.wav')
 
-        db.insert("recognition", [id, predict, message, "test"])
-        os.remove(f'uploads/media/{id}.wav')
-        return {"id": id, "file": f'uploads/media/{id}.wav', "emotion": predict, "message": message}, 200
+        try:
+            db.insert("recognition", [id, emotion, message, predict])
+            os.remove(f'/usr/backend/uploads/{id}.wav')
+        except: 
+            db.update("recognition", [id, emotion, message, predict])
+
+        return {"id": id, "file": f'/usr/backend/uploads/{id}.wav', "emotion": emotion, "predict": predict, "message": message}, 200
