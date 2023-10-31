@@ -23,15 +23,5 @@
         "titulo": "Comuputador Neutro",
         "imagem": "/assets/imagens/neutro.png",
         "tag": "neutral"
-    },
-    {
-        "titulo": "Comuputador Error",
-        "imagem": "/assets/imagens/f.png",
-        "tag": "error"
-    },
-    {
-        "titulo": "Comuputador Icone",
-        "imagem": "/assets/imagens/sentimentobo.png",
-        "tag": "icon"
     }
 ]
