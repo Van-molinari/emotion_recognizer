@@ -14,7 +14,7 @@ async function enviaAudio(audio) {
 
 async function emocao(id) {
     try {
-        const conexao = await fetch(`http://localhost:5500/recognize/${id}`)
+        const conexao = await fetch(`http://localhost:5500/search/${id}`)
         const conexaoEmocaoConvertida = await conexao.json()
         if (conexaoEmocaoConvertida.erro) {
             throw Error('ID nao existe')

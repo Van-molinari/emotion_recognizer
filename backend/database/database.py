@@ -46,4 +46,14 @@ class Database:
         query = self.cursor.fetchall()
 
         return query
+
+    def check_file(self, file):
+        path_Audio = f"/var/lib/mysql-files/{file}"
+        select_query = f"SELECT Audio_id FROM audios WHERE Audio_content=LOAD_FILE('{path_Audio}')"
+        print(select_query)
+        self.cursor.execute(select_query)
+        query = self.cursor.fetchall()
+        print(query)
+        if len(query) > 0: return True, query[0][0]
+        else: return False
         

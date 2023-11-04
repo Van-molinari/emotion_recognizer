@@ -6,3 +6,4 @@ app/controllers/__pycache__/routes.cpython-310.pyc
 __pycache__/**
 database/mysql/**
 mysql/**
+.DS_Store

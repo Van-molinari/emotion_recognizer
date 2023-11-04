@@ -19,22 +19,36 @@ class UploadController(Resource):
     @api_upload.response(400, "Bad Request")
     @api_upload.expect(upload_parser)
     def post(self):
-        print(request.files)
-        f = request.files['file']
-        if f.filename.endswith(".wav") or f.filename.endswith(".mp3"):
-            file_id = str(uuid.uuid1())
-            f.save("/usr/backend/uploads/" + f.filename)
-            rec.convertAudio("/usr/backend/uploads/" + f.filename)
-            db = database.Database()
-            db.insert("audios", [file_id, f.filename])
-            os.remove("/usr/backend/uploads/" + f.filename)
-            recognize = RecognizeController()
-            thread = threading.Thread(target=recognize.get, args=(file_id,))
-            thread.start()
+        try:
+            print(request.files)
+            f = request.files['file']
+            if f.filename.endswith(".wav") or f.filename.endswith(".mp3"):
+                print("Length:", request.content_length)
+                if (request.content_length < 90000 and f.filename.endswith(".mp3")) or (request.content_length < 1000000 and f.filename.endswith(".wav")):
+                    file_id = str(uuid.uuid1())
+                    f.save("/usr/backend/uploads/" + f.filename)
+                    rec.convertAudio("/usr/backend/uploads/" + f.filename)
+                    filename = f.filename.replace(".mp3", ".wav")
+                    db = database.Database()
+                    
+                    file_exists = db.check_file(filename)
+                    if file_exists == False: 
+                        db.insert("audios", [file_id, filename])
+                        recognize = RecognizeController()
+                        thread = threading.Thread(target=recognize.get, args=(file_id,))
+                        thread.start()
+                    else: 
+                        file_id = file_exists[1]
 
-            return {"id": file_id, "file": f.filename}, 201
-        else:
-            return {"error": "Not supported. Please, upload only WAV or MP3 files."}, 400
+                    os.remove("/usr/backend/uploads/" + filename)
+
+                    return {"id": file_id, "file": filename}, 201
+                else:
+                    return {"error": "Not supported. Please, upload only audios with maximum 1MB."}, 400
+            else:
+                return {"error": "Not supported. Please, upload only WAV or MP3 files."}, 400
+        except:
+            return {"error": "Internal server error."}, 500
 
 api_search = Namespace('Search', description='Search for uploaded scripts in database')
 
@@ -61,7 +75,7 @@ class Search(Resource):
         final_list = {
             "id": file_id,
             "emotion": emotion,
-            "transcript": message.decode("utf-8"),
+            "message": message,
             "percentage": percentage
         }
         return final_list, 200
