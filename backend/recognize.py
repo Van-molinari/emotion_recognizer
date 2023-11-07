@@ -45,13 +45,12 @@ def predictSound(AUDIO, info = False, plot_waveform = False, plot_spectrogram = 
     return predictions[0], round(percentage, 2)
 
 def returnText(audio):
-    speech = sr.Recognizer()
-    with sr.AudioFile(audio) as source:
-        audio_data = speech.record(source)
-    recognized_text = speech.recognize_google(audio_data)
-    print(recognized_text)
-    return recognized_text
-
-# predictSound('<enter_path_here>')
-
-# returnText("media/1001_IEO_DIS_HI.wav")
+    try:
+        speech = sr.Recognizer()
+        with sr.AudioFile(audio) as source:
+            audio_data = speech.record(source)
+        recognized_text = speech.recognize_google(audio_data)
+        print(recognized_text)
+        return recognized_text
+    except:
+        return "Not identified speech"

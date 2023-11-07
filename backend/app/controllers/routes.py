@@ -9,7 +9,6 @@ import recognize as rec
 import uuid
 
 api_upload = Namespace('Upload', description='Uploads audio data to be processed')
-
 upload_parser = api_upload.parser()
 upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
 
@@ -37,6 +36,7 @@ class UploadController(Resource):
                         recognize = RecognizeController()
                         thread = threading.Thread(target=recognize.get, args=(file_id,))
                         thread.start()
+                        thread.join()
                     else: 
                         file_id = file_exists[1]
 
@@ -44,14 +44,16 @@ class UploadController(Resource):
 
                     return {"id": file_id, "file": filename}, 201
                 else:
-                    return {"error": "Not supported. Please, upload only audios with maximum 1MB."}, 400
+                    if f.filename.endswith(".mp3"): 
+                        return {"error": f"Not supported. Please, upload only MP3 audios with maximum 90KB."}, 400
+                    else: 
+                        return {"error": f"Not supported. Please, upload only WAV audios with maximum 1MB."}, 400
             else:
                 return {"error": "Not supported. Please, upload only WAV or MP3 files."}, 400
         except:
             return {"error": "Internal server error."}, 500
 
 api_search = Namespace('Search', description='Search for uploaded scripts in database')
-
 search_model = api_search.parser()
 search_model.add_argument('id', location='id', type=str, required=True)
 
@@ -60,43 +62,59 @@ class SearchController(Resource):
     @api_search.response(200, "OK")
     @api_search.response(404, "Not Found")
     def get(self):
-        db = database.Database()
-        final_list = db.select("audios")
-        return final_list, 200
+        try:
+            db = database.Database()
+            final_list = db.select("audios")
+            return final_list, 200
+        except: 
+            return {"error": "Internal server error."}, 500
 
 @api_search.route('/<id>',)
 class Search(Resource):        
     @api_search.response(200, "OK")
     @api_search.response(404, "Not Found")
     def get(self, id):
-        db = database.Database()
-        final_list = db.select("recognition", id)[0]
-        file_id, emotion, message, percentage = final_list
-        final_list = {
-            "id": file_id,
-            "emotion": emotion,
-            "message": message,
-            "percentage": percentage
-        }
-        return final_list, 200
+        try:
+            db = database.Database()
+            final_list = db.select("recognition", id)
+            if len(final_list) > 0:
+                file_id, emotion, message, percentage = final_list[0]
+                final_list = {
+                    "id": file_id,
+                    "emotion": emotion,
+                    "message": message,
+                    "percentage": percentage
+                }
+                return final_list, 200
+            else:
+                return {"error": f"ID {id} not found"}, 404
+        except: 
+            return {"error": "Internal server error."}, 500
 
 api_recognize = Namespace('Recognize', description='Recognize human emotion and transcript audio speech')
+
 @api_recognize.route('/<id>')
 class RecognizeController(Resource):        
     @api_recognize.response(200, "OK")
     @api_recognize.response(404, "Not Found")
     def get(self, id):
-        db = database.Database()
-        audio_file = db.select("audios", id)[0][0]
-        with open(f'/usr/backend/uploads/{id}.wav', 'wb') as audio:
-            audio.write(audio_file)
-        emotion, predict = rec.predictSound(f'/usr/backend/uploads/{id}.wav')
-        message = rec.returnText(f'/usr/backend/uploads/{id}.wav')
-
         try:
-            db.insert("recognition", [id, emotion, message, predict])
-            os.remove(f'/usr/backend/uploads/{id}.wav')
-        except: 
-            db.update("recognition", [id, emotion, message, predict])
+            db = database.Database()
+            audio_file = db.select("audios", id)
+            if len(audio_file) > 0:
+                with open(f'/usr/backend/uploads/{id}.wav', 'wb') as audio:
+                    audio.write(audio_file[0][0])
+                emotion, predict = rec.predictSound(f'/usr/backend/uploads/{id}.wav')
+                message = rec.returnText(f'/usr/backend/uploads/{id}.wav')
 
-        return {"id": id, "file": f'/usr/backend/uploads/{id}.wav', "emotion": emotion, "predict": predict, "message": message}, 200
+                try:
+                    db.insert("recognition", [id, emotion, message, predict])
+                    os.remove(f'/usr/backend/uploads/{id}.wav')
+                except: 
+                    db.update("recognition", [id, emotion, message, predict])
+
+                return {"id": id, "file": f'/usr/backend/uploads/{id}.wav', "emotion": emotion, "predict": predict, "message": message}, 200
+            else:
+                return {"error": f"Audio with ID {id} not found"}, 404
+        except: 
+            return {"error": "Internal server error."}, 500

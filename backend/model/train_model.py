@@ -28,7 +28,7 @@ class Model:
         self.X_test = self.X_test[:,:,np.newaxis]
         num_labels = self.y.shape[1]
 
-        self.model.add(Conv1D(128, kernel_size=(5), activation='relu',input_shape=(self.X_train.shape[1],1)))
+        self.model.add(Conv1D(128, kernel_size=(5), activation='relu', input_shape=(self.X_train.shape[1],1)))
 
         self.model.add(Conv1D(128, kernel_size=(5),activation='relu', padding='same'))
         self.model.add(MaxPooling1D(pool_size=(5)))
