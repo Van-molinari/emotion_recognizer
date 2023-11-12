@@ -1,27 +1,32 @@
 [
     {
-        "titulo": "Comuputador Inicial",
+        "titulo": "Main Computer",
         "imagem": "/assets/imagens/plaquinha.png",
         "tag": "pattern"
     },
     {
-        "titulo": "Comuputador Feliz",
+        "titulo": "smiling computer image",
         "imagem": "/assets/imagens/feliz.png",
         "tag": "happy"
     },
     {
-        "titulo": "Comuputador Triste",
+        "titulo": "Sad Computer",
         "imagem": "/assets/imagens/triste.png",
         "tag": "sad"
     },
     {
-        "titulo": "Comuputador Raiva",
+        "titulo": "Angry Computer",
         "imagem": "/assets/imagens/raiva.png",
         "tag": "angry"
     },
     {
-        "titulo": "Comuputador Neutro",
+        "titulo": "Neutral Computer",
         "imagem": "/assets/imagens/neutro.png",
         "tag": "neutral"
+    },
+    {
+        "titulo": "Error Computer",
+        "imagem": "/assets/imagens/f.png",
+        "tag": "error"
     }
 ]

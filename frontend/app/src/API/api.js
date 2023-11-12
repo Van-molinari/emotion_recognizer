@@ -1,31 +1,32 @@
-async function enviaAudio(audio) {
+async function sendAudio(audio) {
     const formData = new FormData();
     formData.append('file', audio);
-    const conexao = await fetch("http://localhost:5500/data/upload", {
+    const connection = await fetch("http://localhost:5500/data/upload", {
         method: "POST",
         body: formData,
     })
-    if (!conexao.ok) {
-        throw new Error("Não foi possível enviar audio")
+    if (connection.status == 400) {
+        const erroJson = await connection.json();
+        return erroJson
     }
-    const conexaoConvertida = await conexao.json();
-    return conexaoConvertida
+    const connectionConverted = await connection.json();
+    return connectionConverted
 }
 
-async function emocao(id) {
+async function emotion(id) {
     try {
-        const conexao = await fetch(`http://localhost:5500/search/${id}`)
-        const conexaoEmocaoConvertida = await conexao.json()
-        if (conexaoEmocaoConvertida.erro) {
-            throw Error('ID nao existe')
+        const connection = await fetch(`http://localhost:5500/search/${id}`)
+        const connectionEmotionConverted = await connection.json()
+        if (connectionEmotionConverted.erro) {
+            throw Error('ID does not exist')
         }
-        return conexaoEmocaoConvertida
+        return connectionEmotionConverted
     } catch (erro) {
         console.log(erro);
     }
 }
 
 export const api ={ 
-    enviaAudio,
-    emocao
+    sendAudio,
+    emotion
 }

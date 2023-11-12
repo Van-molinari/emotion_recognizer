@@ -2,14 +2,14 @@ import styled from 'styled-components'
  
 
 
-const Image = styled.img`
-  
+const Image = styled.img` 
   width: 100%;
   height: 100%;
   
 `
 const Painel = styled.div`
   margin-top: 5vh;
+  height: 100%;
   max-width: 45vh;
   max-height: 45vh;
   width: 40vw

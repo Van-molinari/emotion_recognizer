@@ -5,12 +5,12 @@ import Computer from "./componentes/Computer"
 import Button from "./componentes/Button"
 import { useState } from "react"
 import { api } from "./API/api.js"
-import fotos from './componentes/Computer/fotos.json' 
+import photos from './componentes/Computer/fotos.json'
 
-const Fundo = styled.div`
+const Bottom = styled.div`
   background-color: var(--cor-primaria);
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   position: absolute;
   display: flex;
   //justify-content: space-around;
@@ -20,36 +20,44 @@ const Fundo = styled.div`
 `
 
 function App() {
-  const [speakComputer, setSpeakComputer] = useState('O que é');
+  const [speakComputer, setSpeakComputer] = useState('insert the audio');
   const [speakAudio, setSpeakAudio] = useState('');
 
-  const analisaEmocoes = async (audio) => {
-    setSpeakAudio("Aguarde ...")
-    setSpeakComputer("Aguarde ...")
-    const retorno = await api.enviaAudio(audio)
-    const emocao = await api.emocao(retorno.id)
-    setSpeakAudio(emocao.message)
-    setSpeakComputer(emocao.emotion)
-    atualizaFoto(emocao.emotion)
+  const analyzesEmotions = async (audio) => {
+    updateBubble("Wait ...", "Wait ...")
+    const response = await api.sendAudio(audio)
+    if (response.error) {
+      updateBubble("Something happened with audio", response.error)
+      updatePhoto("error")
+    } else {
+      const emotion = await api.emotion(response.id)
+      updateBubble(emotion.message, "The emotion identified was " + emotion.emotion)
+      updatePhoto(emotion.emotion)
+    }
   }
 
-  const [imagem, setImagem] = useState(fotos[0].imagem)
-  const atualizaFoto = (emocao) => {
-    const novaFoto = fotos.filter((foto) => {
-      return foto.tag === emocao;
+  const updateBubble = (audio, computer) => {
+    setSpeakAudio(audio)
+    setSpeakComputer(computer)
+  }
+
+  const [imagem, setImagem] = useState(photos[0].imagem)
+  const updatePhoto = (emotion) => {
+    const newPhoto = photos.filter((photo) => {
+      return photo.tag === emotion;
     })
 
-    setImagem(novaFoto[0].imagem)
+    setImagem(newPhoto[0].imagem)
   }
 
   return (
-    <Fundo>
-      <EstilosGlobais/>
-      <SpeechBubble speak={speakComputer}/>
-      <Computer imagem={imagem}/>
-      <Button analisaEmocoes={analisaEmocoes}/>
-      <SpeechBubble speak={speakAudio} diz={'O que foi dito:'}/>
-    </Fundo>
+    <Bottom>
+      <EstilosGlobais />
+      <SpeechBubble speak={speakComputer} />
+      <Computer imagem={imagem} />
+      <Button analyzesEmotions={analyzesEmotions} />
+      <SpeechBubble speak={speakAudio} diz={'What was said:'} />
+    </Bottom>
   )
 }
 

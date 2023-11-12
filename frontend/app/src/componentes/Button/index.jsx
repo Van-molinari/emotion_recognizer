@@ -33,16 +33,16 @@ const DivStyle = styled.div`
 `
 
 // eslint-disable-next-line react/prop-types
-export default function Button({ analisaEmocoes }) {
+export default function Button({ analyzesEmotions }) {
     return (
         <DivStyle>
-            <Label htmlFor="audio"> ESCOLHER ÁUDIO</Label>
+            <Label htmlFor="audio"> CHOOSE AUDIO</Label>
             <File className="audio"
                 id="audio"
                 type="file"
                 accept="audio/*"
                 onChange={(event) => {
-                    analisaEmocoes(event.target.files[0])
+                    analyzesEmotions(event.target.files[0])
                 }}
             />
         </DivStyle>

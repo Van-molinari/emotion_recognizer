@@ -3,10 +3,11 @@ import styled from "styled-components"
 const Balloon = styled.textarea`
     width: 50vw;
     height: 10vh;
+    min-height: 3vh;
     background-color: var(--cor-secundaria);
     border: 1px solid var(--cor-borda);
     padding: 10px;
-    margin-bottom: 2vh;
+    margin-bottom: 3vh;
     border-radius: 10px;
     text-align: center;
     font-size: 1rem;
