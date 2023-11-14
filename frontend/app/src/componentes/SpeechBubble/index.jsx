@@ -10,7 +10,8 @@ const Balloon = styled.textarea`
     margin-bottom: 3vh;
     border-radius: 10px;
     text-align: center;
-    font-size: 1rem;
+    font-family: var(--fonte);
+    font-size: 1.7rem;
     resize: none;
 
     color: var(--cor-letra);
@@ -21,6 +22,7 @@ const Balloon = styled.textarea`
 `
 const H3styled = styled.h3`
   margin-bottom: 1px;
+  font-family: var(--fonte);
   width: 50vw;
   font-size: 1.3rem;
 `

@@ -20,18 +20,23 @@ const Bottom = styled.div`
 `
 
 function App() {
-  const [speakComputer, setSpeakComputer] = useState('insert the audio');
+  const [speakComputer, setSpeakComputer] = useState('Clique no botão para inserir o áudio');
   const [speakAudio, setSpeakAudio] = useState('');
-
+  const emotionPortuguese = {
+    "neutral": "neutra",
+    "happy": "feliz",
+    "sad": "triste",
+    "angry": "raiva",
+  }
   const analyzesEmotions = async (audio) => {
-    updateBubble("Wait ...", "Wait ...")
+    updateBubble("Espere, verificando áudio ...", "Espere, verificando áudio ...")
     const response = await api.sendAudio(audio)
     if (response.error) {
-      updateBubble("Something happened with audio", response.error)
+      updateBubble("Aconteceu um problema com o áudio ", response.error)
       updatePhoto("error")
     } else {
       const emotion = await api.emotion(response.id)
-      updateBubble(emotion.message, "The emotion identified was " + emotion.emotion)
+      updateBubble(emotion.message, "A emoção indetificada foi " + emotionPortuguese[emotion.emotion])
       updatePhoto(emotion.emotion)
     }
   }
@@ -56,7 +61,7 @@ function App() {
       <SpeechBubble speak={speakComputer} />
       <Computer imagem={imagem} />
       <Button analyzesEmotions={analyzesEmotions} />
-      <SpeechBubble speak={speakAudio} diz={'What was said:'} />
+      <SpeechBubble speak={speakAudio} diz={'O que foi dito:'} />
     </Bottom>
   )
 }

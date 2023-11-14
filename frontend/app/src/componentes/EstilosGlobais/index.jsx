@@ -6,7 +6,7 @@ const EstilosGlobais = createGlobalStyle`
     --cor-secundaria: #ADC4CE;
     --cor-borda: #F1F0E8;
     --cor-letra: #12486B;
-
+    --fonte: 'Arial', sans-serif;
   }
   html {
     line-height: 1.15; 

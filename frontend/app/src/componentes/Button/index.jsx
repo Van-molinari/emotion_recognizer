@@ -7,6 +7,7 @@ const File = styled.input`
 const Label = styled.label`
     display: flex;
     justify-content: center;
+    font-family: var(--fonte);
     align-items: center;
     width: 15vw;
     height: 6vh;
@@ -36,7 +37,7 @@ const DivStyle = styled.div`
 export default function Button({ analyzesEmotions }) {
     return (
         <DivStyle>
-            <Label htmlFor="audio"> CHOOSE AUDIO</Label>
+            <Label htmlFor="audio"> Escolha um áudio</Label>
             <File className="audio"
                 id="audio"
                 type="file"
