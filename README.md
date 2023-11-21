@@ -1,5 +1,5 @@
 # emotion_recognizer
-![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
+![Badge Finalizado](http://img.shields.io/static/v1?label=STATUS&message=%20FINALIZADO&color=GREEN&style=for-the-badge)
 
 ## :scroll: Índice
 
@@ -61,9 +61,9 @@ análise de sua frequência e intensidade.
 
 ## :microscope: Testes
 
-* Windows 11 pro 64 bit
-* Windows 10 64 bit
-* Linux Ubunto 22.04.3 LTS 64 bit
+* Windows 11 Pro 64 bit
+* Windows 10 Home 64 bit
+* Linux Ubuntu 22.04.3 LTS 64 bit
 * MacOS Ventura 13.0.1 64 bit
 
 ## :pencil2: Autores
