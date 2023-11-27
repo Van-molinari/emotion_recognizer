@@ -36,7 +36,7 @@ function App() {
       updatePhoto("error")
     } else {
       const emotion = await api.emotion(response.id)
-      updateBubble(emotion.message, "A emoção indetificada foi " + emotionPortuguese[emotion.emotion])
+      updateBubble(emotion.message, "Seu áudio foi identificado com a emoção " + emotionPortuguese[emotion.emotion])
       updatePhoto(emotion.emotion)
     }
   }
