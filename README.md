@@ -13,7 +13,7 @@
 
 ## :computer: Descrição do Projeto
 
-*  uma inteligência artificial capaz de reconhecer emoções presentes em uma frase falada por meio da 
+*  Uma inteligência artificial capaz de reconhecer emoções presentes em uma frase falada por meio da 
 análise de sua frequência e intensidade. 
 
 <p align="center">
@@ -22,8 +22,7 @@ análise de sua frequência e intensidade.
 
 ## :wrench: Funcionalidades do projeto
 
-- `Funcionalidade`: Com base no áudio inserido pelo usuario, a aplicação indetifica a emoção da fala e retorna trancrevendo o audio e apresentando a emoção .
-- 
+- `Funcionalidade`: Com base no áudio inserido pelo usuário, a aplicação identifica a emoção da fala e retorna transcrevendo o áudio e apresentando a emoção identificada.
 
 ## :pushpin: Pré-requisitos
 * Docker
@@ -51,11 +50,12 @@ análise de sua frequência e intensidade.
 * Docker Compose: 2.23.0
 
 ## :books: Versões das bibliotecas
-* Tensorflow: 2.12.0
-* Librosa: 0.10.0.post2
+* Tensorflow: 2.13.0
+* Librosa: 0.10.1
 * Pandas: 2.0.3
 * Numpy: 1.23.5
-* Sklearn: 1.2.2
+* Scikit-learn: 1.2.2
+* SpeechRecognition: 3.9.0
 * Styled-components: 6.0.8
 * React 18.2.0
 
